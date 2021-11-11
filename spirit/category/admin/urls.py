@@ -11,6 +11,9 @@ urlpatterns = [
     re_path(r'^$', views.index, name='index'),
     re_path(r'^create/$', views.create, name='create'),
     re_path(r'^update/(?P<category_id>[0-9]+)/$', views.update, name='update'),
+
+    re_path(r'^create_sub/$', views.create_sub, name='create_sub'),
+
 ]
 
 if settings.ST_ORDERED_CATEGORIES:

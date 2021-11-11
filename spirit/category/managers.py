@@ -2,6 +2,9 @@
 
 from django.db import models
 from django.db.models import Q
+from django.contrib.auth.models import AnonymousUser
+
+from ..user.models import UserProfile
 
 from spirit.core.conf import settings
 
@@ -15,8 +18,11 @@ class CategoryQuerySet(models.QuerySet):
     def public(self):
         return self.filter(is_private=False)
 
-    def visible(self):
-        return self.unremoved().public()
+    def visible(self, user):
+            if isinstance(user, AnonymousUser):
+                return self.unremoved().public()
+
+            return self.unremoved().filter(users__exact = user) | self.unremoved().public()
 
     def opened(self):
         return self.filter(

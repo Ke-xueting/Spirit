@@ -11,6 +11,7 @@ from ...core.utils.views import is_post, post_data
 from ...core.utils.decorators import administrator_required
 from ..models import Category
 from .forms import CategoryForm
+from .forms import SubCategoryForm
 
 User = get_user_model()
 
@@ -36,6 +37,24 @@ def create(request):
     return render(
         request=request,
         template_name='spirit/category/admin/create.html',
+        context={'form': form})
+
+def create_sub(request):
+    # if category_id:
+    #     get_object_or_404(
+    #         Category.objects.visible(request.user),
+    #         pk)
+
+    # user = category_id.users
+    category_id=2
+
+    form = SubCategoryForm(data=post_data(request), initial={'parent': category_id})
+    if is_post(request) and form.is_valid():
+        form.save()
+        return redirect(reverse("spirit:category:admin:index"))
+    return render(
+        request=request,
+        template_name='spirit/category/admin/create_sub.html',
         context={'form': form})
 
 
